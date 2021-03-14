@@ -1,0 +1,42 @@
+# Description: Next starter for creating a corporate site with Strapi.
+# Author: Hieu Nguyen <hieunv.ce@gmail.com>
+# Last updated: 13/03/2021
+
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend-corp-site-strapi:dev
+    container_name: backend-corp-site-strapi
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./backend:/app
+    entrypoint: /app/entrypoint.sh
+    networks:
+      - corp-site-networks
+    ports:
+      - 1337:1337
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend-corp-site-next:dev
+    container_name: frontend-corp-site-next
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./frontend:/app
+    entrypoint: /app/entrypoint.sh
+    networks:
+      - corp-site-networks
+    ports:
+      - 3000:3000
+
+networks:
+  corp-site-networks:
+    driver: bridge
